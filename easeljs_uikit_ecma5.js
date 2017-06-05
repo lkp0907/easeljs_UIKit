@@ -79,11 +79,18 @@ UIView.prototype.setAlpha = function(_alpha){
 }
 UIView.prototype.setFrame = function(_x,_y,_width,_height){
 	this.background.graphics.clear();
+	this.frame.x = _x;
+	this.frame.y = _y;
+	this.frame.width = _width;
+	this.frame.height = _height;
 	if(this.color !== "undefined"){
 		this.background.graphics.beginFill(this.color).drawRect(0, 0, this.frame.width, this.frame.height);	
 	}
 	this.x = _x;
 	this.y = _y;
+	if(this.stage !== undefined && this.stage !== null){
+		this.stage.update();	
+	}
 }
 UIView.prototype.setBackgroundColor = function(_color){
 	var obj = this;
