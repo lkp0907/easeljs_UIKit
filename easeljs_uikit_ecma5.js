@@ -222,6 +222,13 @@ UIImageView.prototype.setBackgroundImage = function(path,callback){
 		}
 	}
 }
+UIImageView.prototype.setAlpha = function(_alpha){
+	var obj = this;
+	obj.background.alpha = _alpha;
+	if(obj.stage !== undefined && obj.stage !== null){
+		obj.stage.update();	
+	}
+}
 /* UIButton */
 
 function UIButton(_x,_y,_width,_height) {
@@ -410,6 +417,14 @@ UIButton.prototype.fontize = function(){
 		obj.stage.update();	
 	}
 	
+}
+
+UIButton.prototype.setAlpha = function(_alpha){
+	var obj = this;
+	obj.background.alpha = _alpha;
+	if(obj.stage !== undefined && obj.stage !== null){
+		obj.stage.update();	
+	}
 }
 
 
