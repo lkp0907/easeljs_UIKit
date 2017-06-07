@@ -30,7 +30,7 @@ function UIView(_x,_y,_width,_height) {
 	var _height = typeof _height !== 'undefined' ?  _height : 100;
 
 	this.frame = {x:_x,y:_y,width:_width,height:_height};
-	this.color = "black";
+	this.backgroundColor = "black";
 	
 	this.background = new createjs.Shape();
 	this.background.name = "background";
@@ -43,32 +43,6 @@ function UIView(_x,_y,_width,_height) {
 }
 UIView.prototype = Object.create(UIContainer.prototype);
 UIView.prototype.constructor = UIView;
-UIView.prototype.setBackgroundImage = function(path,callback){
-	var obj = this;
-	obj.background.graphics.clear();
-	if(typeof path === "object"){
-		obj.background.graphics.beginBitmapFill(path, 'no-repeat').drawRect(0, 0, obj.frame.width, obj.frame.height);
-		if(obj.stage !== undefined && obj.stage !== null){
-			obj.stage.update();
-		}
-		if(typeof callback !== "undefined"){
-			callback();
-		}
-	}else{
-		var bitmap = new createjs.Bitmap(path);
-		bitmap.image.onload = function() {
-			
-			obj.background.graphics.beginBitmapFill(this, 'no-repeat').drawRect(0, 0, obj.frame.width, obj.frame.height);
-			if(obj.stage !== undefined && obj.stage !== null){
-				obj.stage.update();
-			}
-			if(typeof callback !== "undefined"){
-				callback();
-			}
-			
-		}
-	}
-}
 
 UIView.prototype.setAlpha = function(_alpha){
 	var obj = this;
@@ -78,63 +52,9 @@ UIView.prototype.setAlpha = function(_alpha){
 	}
 }
 UIView.prototype.setFrame = function(_x,_y,_width,_height){
-	this.background.graphics.clear();
-	this.frame.x = _x;
-	this.frame.y = _y;
-	this.frame.width = _width;
-	this.frame.height = _height;
-	if(this.color !== "undefined"){
-		this.background.graphics.beginFill(this.color).drawRect(0, 0, this.frame.width, this.frame.height);	
-	}
-	this.x = _x;
-	this.y = _y;
-	if(this.stage !== undefined && this.stage !== null){
-		this.stage.update();	
-	}
-}
-UIView.prototype.setBackgroundColor = function(_color){
-	var obj = this;
-	obj.background.graphics.clear();
-	this.color = _color;
-	if(_color == undefined || typeof _color === "undefined"){
-		
-	}
-	else{
-		obj.background.graphics.beginFill(_color).drawRect(0, 0, this.frame.width, this.frame.height);
-	}
-	if(obj.stage !== undefined && obj.stage !== null){
-		obj.stage.update();	
-	}
-}
-function UIImageView(_x,_y,_width,_height) {
-  // Call the parent constructor
-	UIContainer.call(this);
-
-	var _x = typeof _x !== 'undefined' ?  _x : 0;
-	var _y = typeof _y !== 'undefined' ?  _y : 0;
-	var _width = typeof _width !== 'undefined' ?  _width : 100;
-	var _height = typeof _height !== 'undefined' ?  _height : 100;
-	
-	this.frame = {x:_x,y:_y,width:_width,height:_height};
-	this.color = undefined;
-	
-	this.background = new createjs.Shape();
-	this.background.name = "background";
-	this.background.graphics.beginFill("white").drawRect(0, 0, _width, _height);
-	
-	
-	this.addChild(this.background);
-	this.x = _x;
-	this.y = _y;
-
-}
-UIImageView.prototype = Object.create(createjs.Container.prototype);
-UIImageView.prototype.constructor = UIImageView;
-
-UIImageView.prototype.setFrame = function(_x,_y,_width,_height){
 	var obj = this;
 	this.setBounds (_x,_y,_width,_height);
-	if(this.color !== undefined){
+	if(this.backgroundColor !== undefined){
 		this.background.graphics.clear();	
 	}
 	this.frame.x = _x;
@@ -153,21 +73,21 @@ UIImageView.prototype.setFrame = function(_x,_y,_width,_height){
 		obj.stage.update();	
 	}
 }
-
-UIImageView.prototype.setBackgroundColor = function(_color){
+UIView.prototype.setBackgroundColor = function(_color){
 	var obj = this;
-	this.color = _color;
-	if(_color == undefined || typeof _color === "undefined"){
+	
+	this.backgroundColor = _color;
+	if(_color === undefined || typeof _color === "undefined"){
 		obj.background.graphics.clear();
 	}
 	else{
-		obj.background.graphics.beginFill(this.color).drawRect(0, 0, this.frame.width, this.frame.height);
+		obj.background.graphics.beginFill(this.backgroundColor).drawRect(0, 0, this.frame.width, this.frame.height);
 	}
 	if(obj.stage !== undefined && obj.stage !== null){
 		obj.stage.update();	
 	}
 }
-UIImageView.prototype.setShadow = function(_x,_y,_blur,_color){
+UIView.prototype.setShadow = function(_x,_y,_blur,_color){
 	var obj = this;
 	var x = _x, y = _y , blurValue = _blur,color = _color;
 	if (typeof x === "undefined"){
@@ -187,7 +107,7 @@ UIImageView.prototype.setShadow = function(_x,_y,_blur,_color){
 		obj.stage.update();	
 	}
 }
-UIImageView.prototype.setScale = function(_x,_y){
+UIView.prototype.setScale = function(_x,_y){
 	var obj = this;
 	obj.scaleX = _x;
 	obj.scaleY = _y;
@@ -195,10 +115,25 @@ UIImageView.prototype.setScale = function(_x,_y){
 		obj.stage.update();
 	}
 }
+UIView.prototype.setAlpha = function(_alpha){
+	var obj = this;
+	obj.background.alpha = _alpha;
+	if(obj.stage !== undefined && obj.stage !== null){
+		obj.stage.update();	
+	}
+}
+function UIImageView(_x,_y,_width,_height) {
+  // Call the parent constructor
+	UIView.call(this,_x,_y,_width,_height);
+
+}
+UIImageView.prototype = Object.create(UIView.prototype);
+UIImageView.prototype.constructor = UIImageView;
+
 UIImageView.prototype.setBackgroundImage = function(path,callback){
 	var obj = this;
 	obj.background.graphics.clear();
-	obj.color = undefined;
+	obj.backgroundColor = undefined;
 	if(typeof path === "object"){
 		obj.background.graphics.beginBitmapFill(path, 'no-repeat').drawRect(0, 0, obj.frame.width, obj.frame.height);
 		if(obj.stage !== undefined && obj.stage !== null){
@@ -222,40 +157,22 @@ UIImageView.prototype.setBackgroundImage = function(path,callback){
 		}
 	}
 }
-UIImageView.prototype.setAlpha = function(_alpha){
-	var obj = this;
-	obj.background.alpha = _alpha;
-	if(obj.stage !== undefined && obj.stage !== null){
-		obj.stage.update();	
-	}
-}
+
 /* UIButton */
 
 function UIButton(_x,_y,_width,_height) {
   // Call the parent constructor
-	UIContainer.call(this);
+	UIImageView.call(this,_x,_y,_width,_height);
 	
-	var _x = typeof _x !== 'undefined' ?  _x : 0;
-	var _y = typeof _y !== 'undefined' ?  _y : 0;
-	var _width = typeof _width !== 'undefined' ?  _width : 100;
-	var _height = typeof _height !== 'undefined' ?  _height : 100;
-	
-	this.frame = {x:_x,y:_y,width:_width,height:_height};
-	this.color = "white";
-	
-	
-	this.background = new createjs.Shape();
-	this.background.name = "background";
 	//this.background.graphics.beginFill(this.color).drawRect(0, 0, _width, _height);
 	
 	this.fontProperty = {type:"bold",size:"12px",font:"Arial"};
 	
-	this.textLabel = new createjs.Text("", "bold 12px Arial", "#000000");
+	this.textLabel = new UILabel(0,0,_width,_height);
 	this.textLabel.name = "textLabel";
-	this.textLabel.textAlign = "center";
-	this.textLabel.textBaseline = "middle";
+	this.textLabel.setTextAlign("center");
+	this.addChild(this.textLabel);
 	this.autoAlignTextLabel();
-	this.addChild(this.background,this.textLabel);
 	this.x = _x;
 	this.y = _y;
 	
@@ -266,30 +183,8 @@ function UIButton(_x,_y,_width,_height) {
 		// 컨테이너안에 
 }
 
-UIButton.prototype = Object.create(createjs.Container.prototype);
+UIButton.prototype = Object.create(UIImageView.prototype);
 UIButton.prototype.constructor = UIButton;	
-
-UIButton.prototype.setFrame = function(_x,_y,_width,_height){
-	if(typeof _x === "undefined")
-		throw "please input _x";
-	
-	if(typeof _y === "undefined")
-		throw "please input _y";
-	
-	if(typeof _width === "undefined")
-		throw "please input _width";
-	
-	if(typeof _height === "undefined")
-		throw "please input _height";
-	
-	this.background.graphics.clear();
-	this.background.graphics.beginFill(this.color).drawRect(0,0, _width, _height);
-	
-	this.x = _x;
-	this.y = _y;
-	
-	
-}
 
 UIButton.prototype.autoAlignTextLabel = function(){
 	var obj = this;
@@ -300,26 +195,8 @@ UIButton.prototype.autoAlignTextLabel = function(){
 	obj.textLabel.x = (obj.frame.width - b.width)/2-b.x;
 	obj.textLabel.y = (obj.frame.height - b.height)/2-b.y;
 }
-UIButton.prototype.setScale = function(_x,_y){
-	var obj = this;
-	obj.scaleX = _x;
-	obj.scaleY = _y;
-	if(obj.stage !== undefined && obj.stage !== null){
-		obj.stage.update();
-	}
-}
-UIButton.prototype.setBackgroundColor = function(_color){
-	var obj = this;
-	if(_color == undefined || typeof _color === "undefined"){
-		obj.background.graphics.clear();
-	}
-	else{
-		obj.background.graphics.beginFill(_color).drawRect(0, 0, this.frame.width, this.frame.height);
-	}
-	if(obj.stage !== undefined && obj.stage !== null){
-		obj.stage.update();	
-	}
-}
+
+
 UIButton.prototype.setBackgroundImage = function(path,callback){
 	var obj = this;
 	obj.background.graphics.clear();
@@ -379,71 +256,22 @@ UIButton.prototype.addTarget = function(state,handler){
 	}
 }
 UIButton.prototype.setText = function(_text){
-	this.textLabel.text = _text;
-	this.autoAlignTextLabel();
+	this.textLabel.setText(_text);
+	
 }
 
 UIButton.prototype.setFont = function(_font){
-	var obj = this;
-
-	if( typeof _font.size !== 'undefined'){
-		
-		obj.fontProperty.size = _font.size;
-	}
-	if( typeof _font.type !==  'undefined'){
-		
-		obj.fontProperty.type = _font.type;
-	}
-	if( typeof _font.font !==  'undefined'){
-		
-		obj.fontProperty.font = _font.font;
-	}
-	
-	this.fontize();
+	this.textLabel.setFont(_font);
 }
 UIButton.prototype.setColor = function(_color){
-	this.textLabel.color = _color;
+	this.textLabel.setColor(_color);
 }
-UIButton.prototype.fontize = function(){
-	var obj = this;
-	var size = this.fontProperty.size.toString();
-	if(size.indexOf("px") === -1){
-		size += "px";
-	}
-	var font = this.fontProperty.type +" "+ size + " " + this.fontProperty.font;
-	
-	this.textLabel.font = font;
-	if(obj.stage !== undefined && obj.stage !== null){
-		obj.stage.update();	
-	}
-	
-}
-
-UIButton.prototype.setAlpha = function(_alpha){
-	var obj = this;
-	obj.background.alpha = _alpha;
-	if(obj.stage !== undefined && obj.stage !== null){
-		obj.stage.update();	
-	}
-}
-
 
 /* UILabel */
 function UILabel(_x,_y,_width,_height) {
   // Call the parent constructor
-	UIContainer.call(this);
-	
-	var _x = typeof _x !== 'undefined' ?  _x : 0;
-	var _y = typeof _y !== 'undefined' ?  _y : 0;
-	var _width = typeof _width !== 'undefined' ?  _width : 100;
-	var _height = typeof _height !== 'undefined' ?  _height : 100;
-	
-	this.frame = {x:_x,y:_y,width:_width,height:_height};
-	this.fontProperty = {type:"bold",size:"12px",font:"Arial"};
-	this.background = new createjs.Shape();
-	this.background.name = "background";
-	this.background.graphics.beginFill("white").drawRect(0, 0, _width, _height);
-	
+	UIView.call(this,_x,_y,_width,_height);
+		
 	this.outlineLabel = new createjs.Text("", "bold 12px Arial", "#000000");
 	
 	this.outlineLabel.name = "outlineLabel";
@@ -463,8 +291,9 @@ function UILabel(_x,_y,_width,_height) {
 	
 	this.outlineWidth = 0;
 	
+	
+	this.addChild(this.outlineLabel,this.textLabel);
 	this.autoAlignTextLabel();
-	this.addChild(this.background,this.outlineLabel,this.textLabel);
 	this.x = _x;
 	this.y = _y;
 		
@@ -472,24 +301,8 @@ function UILabel(_x,_y,_width,_height) {
 		// 컨테이너안에 일반 백그라운드 Circle 기본
 		// 컨테이너안에 
 }
-UILabel.prototype = Object.create(createjs.Container.prototype);
+UILabel.prototype = Object.create(UIView.prototype);
 UILabel.prototype.constructor = UILabel;
-
-UILabel.prototype.setFrame = function(_x,_y,_width,_height){
-	var obj = this;
-	this.setBounds (_x,_y,_width,_height);
-	this.frame.x = _x;
-	this.frame.y = _y;
-	this.frame.width = _width;
-	this.frame.height = _height;
-	
-	this.x = _x;
-	this.y = _y;
-	
-	if(obj.stage !== undefined && obj.stage !== null){
-		obj.stage.update();	
-	}
-}
 
 UILabel.prototype.setTextAlign = function(_align){
 	var obj = this;
@@ -563,18 +376,7 @@ UILabel.prototype.setFont = function(_font){
 	
 	this.fontize();
 }
-UILabel.prototype.setBackgroundColor = function(_color){
-	var obj = this;
-	if(_color == undefined || typeof _color === "undefined"){
-		obj.background.graphics.clear();
-	}
-	else{
-		obj.background.graphics.beginFill(_color).drawRect(0, 0, this.frame.width, this.frame.height);
-	}
-	if(obj.stage !== undefined && obj.stage !== null){
-		obj.stage.update();	
-	}
-}
+
 UILabel.prototype.setColor = function(_color){
 	var obj = this;
 	this.textLabel.color = _color;

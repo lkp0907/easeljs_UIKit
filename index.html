@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<head>
+</head>
+<body>
+    <canvas id="canvas" width="980" height="720"></canvas>
+    <script src="vendor/jquery-1.9.1.min.js"></script>
+    <script src="vendor/easeljs-0.8.2.min.js" ></script>
+    <script src="vendor/tweenjs-0.6.2.min.js"></script>
+    <script src="easeljs_uikit_ecma5.js" ></script>
+    <script>
+    var stage = new createjs.Stage("canvas");
+
+    // Create Button
+    var button = new UIButton(0,0,100,50);
+    // set button background color
+    button.setBackgroundColor("red");
+    // set button text
+    button.setText("Foo");
+    // add target when button clicked
+    button.addTarget("click",function(){
+        alert("button Clicked !");
+    });
+
+    // add button into canvas 
+    stage.addChild(button);
+
+    // Create Image
+    var imageView = new UIImageView(200,0,100,50);
+    // set button background color
+    // set button text
+    imageView.setBackgroundImage("imgs/free.jpg");
+    // add target when button clicked
+    
+    stage.addChild(imageView);
+
+    // rendering canvas
+    stage.update();
+    </script>
+</body>
+</html>
